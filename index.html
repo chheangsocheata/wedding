@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
+    <title>wedding · refined & smooth</title>
+    <!-- Tailwind via CDN (lightweight) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* ----- ultra clean base ----- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        background: #efe4d9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 0.75rem;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* ===== fluid scale (smoother clamp steps) ===== */
+      .text-micro {
+        font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+        letter-spacing: 0.03em;
+      }
+      .text-xs-responsive {
+        font-size: clamp(0.7rem, 2vw, 0.85rem);
+      }
+      .text-sm-responsive {
+        font-size: clamp(0.8rem, 2.3vw, 0.95rem);
+      }
+      .text-base-responsive {
+        font-size: clamp(0.95rem, 2.6vw, 1.15rem);
+      }
+      .text-lg-responsive {
+        font-size: clamp(1.2rem, 3.8vw, 1.6rem);
+      }
+      .text-xl-responsive {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+      }
+      .text-2xl-responsive {
+        font-size: clamp(1.9rem, 6.5vw, 2.8rem);
+      }
+      .text-3xl-responsive {
+        font-size: clamp(2.2rem, 8vw, 3.8rem);
+      }
+      .text-4xl-responsive {
+        font-size: clamp(2.5rem, 9vw, 4.5rem);
+      }
+
+      /* ===== main container – soft depth ===== */
+      .container-perfect {
+        width: min(95%, 940px);
+        margin: 0 auto;
+        background: white;
+        border-radius: 32px;
+        box-shadow: 0 25px 45px -25px #1f1b16, 0 2px 8px rgba(0, 0, 0, 0.02);
+        transition: box-shadow 0.3s;
+        overflow: hidden; /* ADDED: prevents content overflow during animations */
+      }
+
+      /* ===== section spacing (consistent rhythm) ===== */
+      .section-padding {
+        padding: clamp(1.3rem, 4.5vh, 2.6rem) clamp(1.3rem, 5vw, 3rem);
+      }
+      .section-gap {
+        margin-bottom: clamp(1.8rem, 5.5vh, 3.2rem);
+      }
+
+      /* ===== guest frame – delicate ===== */
+      .guest-frame {
+        background: white;
+        border: 1px solid #dfd3c8;
+        border-radius: 28px;
+        box-shadow: 0 12px 20px -16px #9f8a78;
+        width: min(68%, 280px);
+        margin: 0 auto;
+        padding: clamp(1rem, 4vw, 1.5rem) clamp(0.8rem, 3vw, 1.2rem);
+        transition: transform 0.2s ease, box-shadow 0.2s;
+        position: relative; /* ADDED: for pseudo-element positioning */
+        will-change: transform; /* ADDED: performance optimization */
+      }
+      .guest-frame:hover {
+        transform: scale(1.01);
+        box-shadow: 0 14px 24px -14px #7f6a58;
+      }
+      .guest-frame::before {
+        content: '✧';
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: clamp(1.3rem, 3.2vw, 2rem);
+        color: #c4a484;
+        background: white;
+        padding: 0 14px;
+        line-height: 1;
+      }
+
+      /* ===== primary button – silky ===== */
+      .btn-primary {
+        background: transparent;
+        border: 1.8px solid #c4a484;
+        color: #4a3f38;
+        letter-spacing: 0.2rem;
+        border-radius: 60px;
+        font-size: clamp(0.7rem, 2vw, 0.9rem);
+        padding: clamp(0.5rem, 1.8vh, 0.8rem) clamp(1.5rem, 6vw, 3rem);
+        text-transform: uppercase;
+        cursor: pointer;
+        width: fit-content;
+        margin: 0 auto;
+        transition: background 0.25s, color 0.25s, transform 0.2s,
+          border-color 0.2s;
+        backdrop-filter: blur(2px);
+        will-change: transform, background; /* ADDED: performance optimization */
+      }
+      .btn-primary:hover {
+        background: #c4a484;
+        color: white;
+        transform: translateY(-3px);
+        border-color: #c4a484;
+        box-shadow: 0 12px 18px -14px #b29680;
+      }
+
+      /* ===== header box ===== */
+      .header-box {
+        background: white;
+        border: 1px solid #e2d8cf;
+        border-radius: 32px;
+        padding: clamp(1.2rem, 4vh, 2.2rem);
+      }
+
+      /* ===== photo grid – smoother gap ===== */
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.8rem, 2vw, 1.4rem);
+        max-width: 780px;
+        margin: 0 auto;
+      }
+      @media (min-width: 640px) {
+        .photo-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .photo-item {
+        aspect-ratio: 3/4;
+        background: #f7f1ea;
+        border: 1.8px solid #e0d4c8;
+        border-radius: 24px;
+        overflow: hidden;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b9a48f;
+        font-size: 1.8rem;
+        box-shadow: 0 6px 12px -10px #cabaa9;
+        /* FIXED: Added image loading optimization */
+        background-color: #f0e8e0; /* fallback color while loading */
+      }
+      .photo-item:hover {
+        border-color: #c4a484;
+        box-shadow: 0 12px 18px -15px #b2967a;
+      }
+      .photo-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+        /* FIXED: Added image optimization */
+        opacity: 0;
+        animation: imageFadeIn 0.4s ease forwards;
+        background-color: #f0e8e0; /* fallback */
+      }
+      /* FIXED: Added loading animation */
+      @keyframes imageFadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .photo-item:hover img {
+        transform: scale(1.04);
+      }
+
+      /* ===== map placeholder ===== */
+      .map-placeholder {
+        background: #f9f3ec;
+        border: 1px solid #e0d4c8;
+        border-radius: 32px;
+        aspect-ratio: 16/7;
+        transition: background 0.2s;
+      }
+
+      /* ===== timeline items – clean divider ===== */
+      .timeline-item {
+        display: flex;
+        align-items: center;
+        gap: clamp(1rem, 3vw, 1.8rem);
+        padding: 0.6rem 0;
+        border-bottom: 1px dashed #e7dbd0;
+      }
+      .timeline-item:last-child {
+        border-bottom: none;
+      }
+      .timeline-time {
+        font-weight: 600;
+        color: #c4a484;
+        min-width: clamp(50px, 10vw, 75px);
+        font-size: clamp(0.85rem, 2.2vw, 1rem);
+      }
+      .timeline-event {
+        color: #4a3f38;
+        font-size: clamp(0.85rem, 2.2vw, 1rem);
+      }
+
+      /* ===== back button ===== */
+      .back-btn {
+        color: #c4a484;
+        border: 1px solid #e2d7cc;
+        border-radius: 60px;
+        padding: 0.3rem 1.2rem;
+        background: white;
+        font-size: clamp(0.7rem, 2vw, 0.85rem);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+        cursor: pointer; /* ADDED */
+      }
+      .back-btn:hover {
+        background: #c4a484;
+        color: white;
+        border-color: #c4a484;
+      }
+
+      /* ===== date badge & chips ===== */
+      .date-badge,
+      .chip {
+        border: 1px solid #e2d7cc;
+        border-radius: 60px;
+        padding: 0.3rem 1.2rem;
+        background: white;
+        font-size: clamp(0.7rem, 2vw, 0.85rem);
+        color: #7a6858;
+        white-space: nowrap;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem;
+      }
+
+      /* ===== architectural thanks – smooth texture ===== */
+      .thanks-section-architectural {
+        text-align: center;
+        padding: clamp(1.6rem, 5vh, 2.5rem) clamp(1.2rem, 4vw, 2rem);
+        background: #ffffff;
+        margin-top: clamp(1.6rem, 4.5vh, 2.5rem);
+        position: relative;
+        box-shadow: 0 10px 30px -24px #2c241e, inset 0 -1px 0 #c4a48488,
+          inset 0 1px 0 #c4a48488;
+        border-radius: 0;
+      }
+      .thanks-section-architectural::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 12%;
+        width: 76%;
+        height: 1px;
+        background: repeating-linear-gradient(
+          90deg,
+          #c4a484,
+          #c4a484 6px,
+          transparent 6px,
+          transparent 12px
+        );
+      }
+      .thanks-section-architectural::after {
+        content: '';
+        position: absolute;
+        bottom: 10px;
+        left: 12%;
+        width: 76%;
+        height: 1px;
+        background: repeating-linear-gradient(
+          90deg,
+          #c4a484,
+          #c4a484 6px,
+          transparent 6px,
+          transparent 12px
+        );
+      }
+      .thanks-title-architectural {
+        font-family: 'Cormorant', serif;
+        font-weight: 600;
+        letter-spacing: 0.3rem;
+        color: #2c241e;
+        font-size: clamp(1.3rem, 5vw, 2rem);
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        display: inline-block;
+        padding: 0 0.5rem;
+      }
+      .thanks-title-architectural::before,
+      .thanks-title-architectural::after {
+        content: '—';
+        font-size: 1.2rem;
+        color: #c4a484;
+        margin: 0 0.5rem;
+      }
+      .thanks-text-architectural {
+        color: #4a3f38;
+        font-size: clamp(1rem, 3.2vw, 1.45rem);
+        max-width: 550px;
+        margin: 0 auto 1.5rem;
+        line-height: 1.7;
+        font-weight: 300;
+      }
+      .thanks-signature-architectural {
+        color: #7a6858;
+        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+        letter-spacing: 0.2rem;
+        margin-top: 1rem;
+      }
+
+      /* ===== page transitions – silk (FIXED) ===== */
+      .cover-page {
+        display: block; /* FIXED: use display block instead of relying on opacity */
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.45s ease-in-out, visibility 0.45s;
+      }
+      .inner-page {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.45s ease-in-out, visibility 0.45s;
+      }
+      .inner-page.active {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+      }
+      .cover-page.inactive {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      /* FIXED: Added image loading optimization */
+      .photo-item img[src] {
+        opacity: 1;
+      }
+
+      /* FIXED: Smooth scrolling for the whole page */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* ===== utilities ===== */
+      .font-serif-display {
+        font-family: 'Cormorant', 'Didot', serif;
+      }
+      .font-serif-script {
+        font-family: 'Cormorant Garamond', 'Georgia', serif;
+        font-style: italic;
+      }
+      .text-primary {
+        color: #4a3f38;
+      }
+      .text-secondary {
+        color: #c4a484;
+      }
+      .text-tertiary {
+        color: #b8a28e;
+      }
+      .text-muted {
+        color: #7a6858;
+      }
+      .border-luxury {
+        border-color: #e0d7cc;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .map-placeholder a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-perfect">
+      <!-- COVER PAGE -->
+      <div
+        id="coverPage"
+        class="cover-page w-full section-padding flex flex-col items-center text-center"
+      >
+        <div class="flex gap-2 text-secondary text-xl mb-1 opacity-80">
+          ✧ ✧ ✧
+        </div>
+        <span class="text-micro text-tertiary uppercase tracking-[0.2rem]"
+          >save the date</span
+        >
+
+        <h1
+          class="font-serif-display font-bold text-3xl-responsive text-primary mt-3 leading-[1.1]"
+        >
+          Chitra
+          <span class="font-serif-script text-2xl-responsive text-secondary"
+            >&</span
+          >
+          Cheata
+        </h1>
+
+        <div class="w-16 sm:w-20 h-px bg-[#e0d7cc] my-5"></div>
+
+        <div class="guest-frame relative my-4">
+          <div
+            id="guestNameDisplay"
+            class="font-serif-script text-xl-responsive text-primary"
+          >
+            Dear Guest
+          </div>
+          <p class="text-micro text-tertiary mt-1 tracking-wider">
+            — with pleasure —
+          </p>
+        </div>
+
+        <button id="openInviteBtn" class="btn-primary mt-3">
+          <span>open invitation</span>
+        </button>
+        <p class="text-micro text-tertiary mt-7 opacity-70">
+          double‑click the frame to personalize
+        </p>
+      </div>
+
+      <!-- INNER PAGE (all sections smooth) -->
+      <div id="innerPage" class="inner-page w-full section-padding">
+        <!-- back & date -->
+        <div
+          class="flex flex-wrap justify-between items-center gap-3 mb-6 pb-3 border-b border-luxury"
+        >
+          <button id="backToCoverBtn" class="back-btn">
+            <i class="fas fa-arrow-left text-xs mr-1"></i> back
+          </button>
+          <span class="date-badge">15 · 11 · 2026</span>
+        </div>
+
+        <!-- header box -->
+        <div class="header-box section-gap">
+          <div class="text-center">
+            <span class="text-2xl-responsive text-secondary block leading-6"
+              >✧</span
+            >
+            <h2
+              class="font-serif-display font-bold text-3xl-responsive text-primary mt-1"
+            >
+              WEDDING
+            </h2>
+            <p class="text-sm-responsive text-tertiary mb-4">
+              a day to remember
+            </p>
+            <div
+              class="font-serif-script text-2xl-responsive text-primary mb-5"
+            >
+              Sarah & Thomas
+            </div>
+
+            <!-- guest badge -->
+            <div class="flex justify-center mb-5">
+              <div
+                class="border border-luxury rounded-full px-5 py-1.5 inline-flex items-center gap-3 bg-white shadow-sm"
+              >
+                <span class="text-xs text-secondary">✧</span>
+                <span
+                  id="innerGuestName"
+                  class="font-serif-script text-lg-responsive text-primary"
+                  >Dear Guest</span
+                >
+                <span class="text-xs text-secondary">✧</span>
+              </div>
+            </div>
+
+            <div class="chip-group">
+              <span class="chip">15 NOV 2026</span>
+              <span class="chip">5:00 PM</span>
+              <span class="chip">THE GARDENS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- quote -->
+        <div class="section-gap text-center px-2">
+          <p
+            class="font-serif italic text-base-responsive text-primary max-w-xl mx-auto leading-relaxed"
+          >
+            "Together with our families, we invite you to share in our joy as we
+            exchange vows and begin our new life together."
+          </p>
+        </div>
+
+        <!-- timeline -->
+        <div class="section-gap">
+          <h3
+            class="font-serif-display font-bold text-2xl-responsive text-primary text-center mb-5"
+          >
+            the day
+          </h3>
+          <div class="max-w-sm mx-auto">
+            <div class="timeline-item">
+              <span class="timeline-time">17:00</span
+              ><span class="timeline-event">champagne reception</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-time">18:00</span
+              ><span class="timeline-event">ceremony</span>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-time">20:00</span
+              ><span class="timeline-event">dinner & dancing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- photo grid (6 images, with fallback) -->
+        <div class="section-gap">
+          <h3
+            class="font-serif-display font-bold text-2xl-responsive text-primary text-center mb-5"
+          >
+            prewedding moments
+          </h3>
+          <div class="photo-grid">
+            <div class="photo-item">
+              <img src="img1.JPG" alt="prewedding 1" loading="lazy" />
+            </div>
+            <div class="photo-item">
+              <img src="img2.JPG" alt="prewedding 2" loading="lazy" />
+            </div>
+            <div class="photo-item">
+              <img src="img3.JPG" alt="prewedding 3" loading="lazy" />
+            </div>
+            <div class="photo-item">
+              <img src="img1.JPG" alt="prewedding 4" loading="lazy" />
+            </div>
+            <div class="photo-item">
+              <img src="img1.JPG" alt="prewedding 5" loading="lazy" />
+            </div>
+            <div class="photo-item">
+              <img src="img1.JPG" alt="prewedding 6" loading="lazy" />
+            </div>
+          </div>
+          <p class="text-center text-micro text-tertiary mt-4">
+            six beautiful moments
+          </p>
+        </div>
+
+        <!-- map + link (smooth) -->
+        <div class="section-gap">
+          <h3
+            class="font-serif-display font-bold text-2xl-responsive text-primary text-center mb-5"
+          >
+            location
+          </h3>
+          <div
+            class="map-placeholder mb-3 bg-[#f7f0e8] p-4 flex items-center justify-center"
+          >
+            <a
+              href="https://maps.app.goo.gl/qeWcMeJSAToaHi3z9"
+              target="_blank"
+              class="block text-center w-full"
+            >
+              <span class="text-7xl block mb-2 opacity-80">📍</span>
+              <span
+                class="px-3 text-center font-medium text-base-responsive text-primary"
+                >THE GARDENS · Bhubaneswar</span
+              >
+              <span class="text-xs text-tertiary block mt-2 tracking-wider"
+                >click to open map</span
+              >
+            </a>
+          </div>
+          <p class="text-center text-sm-responsive text-primary">
+            123 Garden Avenue · outdoor ceremony
+          </p>
+        </div>
+
+        <!-- architectural gratitude -->
+        <div class="thanks-section-architectural">
+          <h3 class="thanks-title-architectural">gratitude</h3>
+          <p class="thanks-text-architectural">
+            Thank you for being the foundation<br />of our most important day.
+          </p>
+          <div class="thanks-signature-architectural">
+            <div class="gap-2 text-secondary text-3xl mb-1 tracking-wider">
+              ✧ ✧ ✧
+            </div>
+            <div class="mt-2">S & T</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        // get guest from URL or fallback
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlGuest = urlParams.get('guest')
+          ? decodeURIComponent(urlParams.get('guest')).trim()
+          : null;
+        let currentGuest = urlGuest || 'Dear Guest';
+
+        const coverName = document.getElementById('guestNameDisplay');
+        const innerName = document.getElementById('innerGuestName');
+
+        function setGuestName(val) {
+          if (val && val.trim() !== '') currentGuest = val.trim();
+          if (coverName) coverName.innerText = currentGuest;
+          if (innerName) innerName.innerText = currentGuest;
+        }
+        setGuestName(currentGuest);
+
+        // double‑click on guest frame or inner badge
+        const frame = document.querySelector('.guest-frame');
+        if (frame) {
+          frame.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            let newName = prompt('Enter guest name:', currentGuest);
+            if (newName !== null) setGuestName(newName);
+          });
+        }
+        if (innerName) {
+          innerName.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            let newName = prompt('Edit guest name:', currentGuest);
+            if (newName !== null) setGuestName(newName);
+          });
+        }
+
+        // page toggles with smooth transition (FIXED)
+        const cover = document.getElementById('coverPage');
+        const inner = document.getElementById('innerPage');
+        const openBtn = document.getElementById('openInviteBtn');
+        const backBtn = document.getElementById('backToCoverBtn');
+
+        // FIXED: Ensure initial states are correct
+        cover.classList.remove('inactive');
+        inner.classList.remove('active');
+
+        openBtn.addEventListener('click', () => {
+          cover.classList.add('inactive');
+          inner.classList.add('active');
+          // FIXED: Use requestAnimationFrame for smoother scroll
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+
+        backBtn.addEventListener('click', () => {
+          inner.classList.remove('active');
+          cover.classList.remove('inactive');
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+
+        // FIXED: Preload images for smoother rendering
+        const images = document.querySelectorAll('.photo-item img');
+        images.forEach((img) => {
+          if (img.complete) {
+            img.style.opacity = '1';
+          } else {
+            img.addEventListener('load', function () {
+              this.style.opacity = '1';
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
